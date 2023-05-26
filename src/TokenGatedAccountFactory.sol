@@ -5,21 +5,26 @@ pragma solidity ^0.8.12;
 import "@thirdweb-dev/contracts/smart-wallet/utils/BaseAccountFactory.sol";
 
 // Smart wallet implementation
-import {TokenBoundAccount} from "./TokenBoundAccount.sol";
+import {TokenGatedAccount} from "./TokenGatedAccount.sol";
 
-contract TokenBoundAccountFactory is BaseAccountFactory {
-    /// @notice Emitted when a new Token Bound Account is created.
-    event TokenBoundAccountCreated(address indexed account, bytes indexed data);
+contract TokenGatedAccountFactory is BaseAccountFactory {
+    /// @notice Emitted when a new Token Gated Account is created.
+    event TokenGatedAccountCreated(address indexed account, bytes indexed data);
 
     /*///////////////////////////////////////////////////////////////
                             Constructor
     //////////////////////////////////////////////////////////////*/
 
+    /**
+     * @notice Executes once when a contract is created to initialize state variables
+     *
+     * @param _entrypoint - 0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789
+     */
     constructor(
         IEntryPoint _entrypoint
     )
         BaseAccountFactory(
-            address(new TokenBoundAccount(_entrypoint, address(this)))
+            address(new TokenGatedAccount(_entrypoint, address(this)))
         )
     {}
 
@@ -41,7 +46,7 @@ contract TokenBoundAccountFactory is BaseAccountFactory {
         address _admin,
         bytes calldata _data
     ) internal override {
-        TokenBoundAccount(payable(_account)).initialize(_admin, _data);
-        emit TokenBoundAccountCreated(_account, _data);
+        TokenGatedAccount(payable(_account)).initialize(_admin, _data);
+        emit TokenGatedAccountCreated(_account, _data);
     }
 }
